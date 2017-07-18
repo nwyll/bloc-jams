@@ -1,18 +1,16 @@
 var pointsArray = document.getElementsByClassName('point');
 
+
+var revealPoint = function(point) {
+    point.style.opacity = 1;
+    point.style.transform = "scaleX(1) translateY(0)";
+    point.style.msTransform = "scaleX(1) translateY(0)";
+    point.style.WebkitTransform = "scaleX(1) translateY(0)";
+  }
+
 var animatePoints = function(points) {
-  var revealPoints = function() {
-    for(var i = 0; i < points.length; i++) {
-      points[i].style.opacity = 1;
-      points[i].style.transform = "scaleX(1) translateY(0)";
-      points[i].style.msTransform = "scaleX(1) translateY(0)";
-      points[i].style.WebkitTransform = "scaleX(1) translateY(0)";
-    }
+  forEach(points, revealPoint);
   };
-
-  revealPoints();
-
-};
 
 window.onload = function () {
   //Automatically animate of screen is taller than 950 pixels
