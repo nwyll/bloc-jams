@@ -28,6 +28,32 @@ var albumPicasso = {
      ]
  };
 
+ var albumArcadeFire = {
+     title: 'The Suburbs',
+     artist: 'Arcade Fire',
+     label: 'Merge Records',
+     year: '2010',
+     albumArtUrl: 'assets/images/album_covers/the-suburbs.jpg',
+     songs: [
+         { title: 'The Suburbs', duration: '5:51' },
+         { title: 'Ready to Start', duration: '4:16' },
+         { title: 'Modern Man', duration: '4:40'},
+         { title: 'Rococo', duration: '3:57' },
+         { title: 'Empty Room', duration: '2:52'},
+         { title: 'City With No Children', duration: '3:12'},
+         { title: 'Half Light I', duration: '4:14'},
+         { title: 'Half Light II', duration: '4:27'},
+         { title: 'Suburban War', duration: '4:45'},
+         { title: 'Month of May', duration: '3:51'},
+         { title: 'Wasted Hours', duration: '3:21'},
+         { title: 'Deep Blue', duration: '4:28'},
+         { title: 'We Use to Wait', duration: '5:01'},
+         { title: 'Sprawl I', duration: '2:54'},
+         { title: 'Sprawl II', duration: '5:26'},
+         { title: 'The Suburbs (continued)', duration: '1:28'}
+     ]
+ };
+
  var createSongRow = function(songNumber, songName, songLength) {
     var template =
        '<tr class="album-view-song-item">'
@@ -66,3 +92,26 @@ var setCurrentAlbum = function(album) {
 window.onload = function() {
   setCurrentAlbum(albumPicasso);
 };
+
+var albumCover = document.getElementsByClassName('album-cover-art')[0];
+var currentAlbum ='picasso';
+  albumCover.addEventListener("click", function(event) {
+    switch(currentAlbum) {
+    case 'picasso':
+        setCurrentAlbum(albumMarconi);
+        currentAlbum = 'marconi';
+        break;
+    case 'marconi':
+        setCurrentAlbum(albumArcadeFire);
+        currentAlbum = 'arcadeFire';
+        break;
+    case 'arcadeFire':
+        setCurrentAlbum(albumPicasso);
+        currentAlbum = 'picasso';
+        break;
+    default:
+        setCurrentAlbum(albumPicasso);
+        currentAlbum = 'picasso';
+        break;
+    }
+  });
