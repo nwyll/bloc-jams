@@ -41,6 +41,7 @@ var albumPicasso = {
 };
 
 var setCurrentAlbum = function(album) {
+
   //Select all HTML element required to display album
   var albumTitle = document.getElementsByClassName('album-view-title')[0];
   var albumArtist = document.getElementsByClassName('album-view-artist')[0];
@@ -59,16 +60,18 @@ var setCurrentAlbum = function(album) {
 
   //loop throught the song list and add them to the HTML
   for(var i = 0; i < album.songs.length; i++) {
-    albumSongList.innerHTML += createSongRow(i+1, album.songs[i].title, album.songs[i].duration);
+    albumSongList.innerHTML += createSongRow( i + 1, album.songs[i].title, album.songs[i].duration);
   }
 };
 
-//Find Parent By Class Name
+//Finds the parent element of a given element that matches the target class name
 var findParentByClassName = function(element, targetClass) {
+
+  //check if there is an element
   if(element) {
     //sets curent parent as the parent of the element passed
     var currentParent = element.parentElement;
-    //while the current parent does not = the target classs we are searching for and is not null, then move up to the next parent element
+    //while the current parent does not = the target classs we are searching for (and is not null), then move up to the next parent element
     while(currentParent.className !== targetClass && currentParent.className !== null) {
     currentParent = currentParent.parentElement;
     }
@@ -76,27 +79,53 @@ var findParentByClassName = function(element, targetClass) {
   return currentParent;
 };
 
-//Get Song Item
+//Get Song Item: return the element that has class ="song-item-number" when you are anywhere on the row
 var getSongItem = function(element) {
 
-};
+  switch (element.className) {
+    //if the element class is the song-item-number, great thats what we are looking for, return the element
+    case 'song-item-number':
+      return element;
+    //if the element class is the title or duration (the other two cells on the row), then find the parent (the row) then search the parent row for the song-item-number
+    case 'song-item-title':
+    case 'song-item-duration':
+      return findParentByClassName(element, 'album-view-song-item').querySelector('.song-item-number');
+    //if the class is the song button, play or pause, those are children of the song-item-number cell, so just find the parent and return it
+    case 'album-song-button':
+    case 'ion-play':
+    case 'ion-pause':
+      return findParentByClassName(element, 'song-item-number');
+    //if the class is the album-view-song-item, then thats the row, search the row for the song-item-number
+    case 'album-view-song-item':
+      return element.querySelector('.song-item-number');
+    default:
+      return;
+  }
 
+};
 
 //Click handler
 var clickHandler = function(targetElement) {
 
   var songItem = getSongItem(targetElement);
 
+  //if a song is not currently playing then you are clicking to play the song, so change the button to pause
   if (currentPlayingSong === null) {
     songItem.innerHTML = pauseButtonTemplate;
     currentPlayingSong = songItem.getAttribute('data-song-number');
-  } else if (currentPlayingSong === songItem.getAttribute('data-song-number') {
+  //else if the current song playing is the one you are clicking then you are clicking to pause the song, so change the button to play
+} else if (currentPlayingSong === songItem.getAttribute('data-song-number')) {
     songItem.innerHTML = playButtonTemplate;
     currentPlayingSong = null;
-  } else if (currentPlayingSong !== songItem.getAttribute('data-song-number') {
+  //else the currently playing song is not the one you are clicking on, ie: you want to change songs
+} else if (currentPlayingSong !== songItem.getAttribute('data-song-number')) {
     var currentPlayingSongElement = document.querySelector('[data-song-number="' + currentPlayingSong +'"]');
+    //currentPlayingSongElement = song number of the currently playing song
+    //when clicked you are swithching to play another some so change the current song's play button back to the song number
     currentPlayingSongElement.innerHTML = currentPlayingSongElement.getAttribute('data-song-number');
+    //below sets the new song choosen to the pause button
     songItem.innerHTML = pauseButtonTemplate;
+    //now current song number is data-song-number from the item clicked
     currentPlayingSong = songItem.getAttribute('data-song-number');
   }
 
@@ -117,22 +146,31 @@ window.onload = function() {
   setCurrentAlbum(albumPicasso);
 
   songListContainer.addEventListener('mouseover', function(event) {
-    // Only target individual song rows during event delegation
-    if(event.target.parentElement.className === 'album-view-song-item') {
-      // Changes the content from the number to the play button's HTML
-      event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
+
+    //gets the song item number cell from the element the mouse is over
+     var songItem = getSongItem(event.target);
+     //if it is not the current song then change the number to the playbutton
+     if(songItem.getAttribute('data-song-number') !== currentPlayingSong) {
+       // Only targets individual song rows during event delegation
+       if(event.target.parentElement.className === 'album-view-song-item') {
+         // Changes the content from the number to the play button's HTML
+         event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
+       }
     }
+    
   });
-  
 
   for(var i = 0; i < songRows.length; i++) {
     //On mouseleave the playbutton reverts back to the song number
     songRows[i].addEventListener('mouseleave', function(event){
-      //Selects firstChild element of songRows, which is the song-item-number element
+
+      //gets the song item number cell from the element the mouse left
       var songItem = getSongItem(event.target);
+      //song item number is set to the value from data-song-number attribute from the song item number cell from the element the mouse left
       var songItemNumber = songItem.getAttribute('data-song-number');
 
-      if (songItemNumber !== currentlyPlayingSong) {
+      //if the song is not playing and the mouse leaves, change the play button back to a number
+      if (songItemNumber !== currentPlayingSong) {
         songItem.innerHTML = songItemNumber;
       }
     });
