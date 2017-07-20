@@ -78,7 +78,7 @@ var findParentByClassName = function(element, targetClass) {
 
 //Get Song Item
 var getSongItem = function(element) {
-  
+
 };
 
 
@@ -123,6 +123,7 @@ window.onload = function() {
       event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
     }
   });
+  
 
   for(var i = 0; i < songRows.length; i++) {
     //On mouseleave the playbutton reverts back to the song number
