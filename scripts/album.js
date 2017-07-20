@@ -77,7 +77,10 @@ var findParentByClassName = function(element, targetClass) {
 };
 
 //Get Song Item
-var getSongItem = function(element) {};
+var getSongItem = function(element) {
+  
+};
+
 
 //Click handler
 var clickHandler = function(targetElement) {
