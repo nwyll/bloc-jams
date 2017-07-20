@@ -63,12 +63,52 @@ var setCurrentAlbum = function(album) {
   }
 };
 
+//Find Parent By Class Name
+var findParentByClassName = function(element, targetClass) {
+  if(element) {
+    //sets curent parent as the parent of the element passed
+    var currentParent = element.parentElement;
+    //while the current parent does not = the target classs we are searching for and is not null, then move up to the next parent element
+    while(currentParent.className !== targetClass && currentParent.className !== null) {
+    currentParent = currentParent.parentElement;
+    }
+  }
+  return currentParent;
+};
 
+//Get Song Item
+var getSongItem = function(element) {};
+
+//Click handler
+var clickHandler = function(targetElement) {
+
+  var songItem = getSongItem(targetElement);
+
+  if (currentPlayingSong === null) {
+    songItem.innerHTML = pauseButtonTemplate;
+    currentPlayingSong = songItem.getAttribute('data-song-number');
+  } else if (currentPlayingSong === songItem.getAttribute('data-song-number') {
+    songItem.innerHTML = playButtonTemplate;
+    currentPlayingSong = null;
+  } else if (currentPlayingSong !== songItem.getAttribute('data-song-number') {
+    var currentPlayingSongElement = document.querySelector('[data-song-number="' + currentPlayingSong +'"]');
+    currentPlayingSongElement.innerHTML = currentPlayingSongElement.getAttribute('data-song-number');
+    songItem.innerHTML = pauseButtonTemplate;
+    currentPlayingSong = songItem.getAttribute('data-song-number');
+  }
+
+};
+
+//Elements that will have event listeners
 var songListContainer = document.getElementsByClassName('album-view-song-list')[0];
 var songRows = document.getElementsByClassName('album-view-song-item');
 
+//Play & Pause Buttons
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
+var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 
+//Store state of playing songs
+var currentPlayingSong = null;
 
 window.onload = function() {
   setCurrentAlbum(albumPicasso);
@@ -82,10 +122,20 @@ window.onload = function() {
   });
 
   for(var i = 0; i < songRows.length; i++) {
+    //On mouseleave the playbutton reverts back to the song number
     songRows[i].addEventListener('mouseleave', function(event){
-      //Reverts playbutton back to number
-      // Selects first child element of songRows, which is the song-item-number element
-      this.children[0].innerHTML = this.children[0].getAttribute('data-song-number');
+      //Selects firstChild element of songRows, which is the song-item-number element
+      var songItem = getSongItem(event.target);
+      var songItemNumber = songItem.getAttribute('data-song-number');
+
+      if (songItemNumber !== currentlyPlayingSong) {
+        songItem.innerHTML = songItemNumber;
+      }
+    });
+
+    //On click change the current value of the song
+    songRows[i].addEventListener('click', function(event) {
+      clickHandler(event.target);
     });
   }
 }
