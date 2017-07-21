@@ -145,20 +145,32 @@ var currentPlayingSong = null;
 window.onload = function() {
   setCurrentAlbum(albumPicasso);
 
-  songListContainer.addEventListener('mouseover', function(event) {
+  //My Solution
+  /*songListContainer.addEventListener('mouseover', function(event) {
 
     //gets the song item number cell from the element the mouse is over
      var songItem = getSongItem(event.target);
      //if it is not the current song then change the number to the playbutton
      if(songItem.getAttribute('data-song-number') !== currentPlayingSong) {
-       // Only targets individual song rows during event delegation
+       //Targets each song rows during event delegation
        if(event.target.parentElement.className === 'album-view-song-item') {
          // Changes the content from the number to the play button's HTML
-         event.target.parentElement.querySelector('.song-item-number').innerHTML = playButtonTemplate;
+         songItem.innerHTML = playButtonTemplate;
        }
     }
-    
-  });
+
+  });*/
+
+  //Bloc solution
+  songListContainer.addEventListener('mouseover', function(event) {
+    if (event.target.parentElement.className === 'album-view-song-item') {
+      var songItem = getSongItem(event.target);
+
+      if (songItem.getAttribute('data-song-number') !== currentPlayingSong) {
+        songItem.innerHTML = playButtonTemplate;
+      }
+    }
+   });
 
   for(var i = 0; i < songRows.length; i++) {
     //On mouseleave the playbutton reverts back to the song number
