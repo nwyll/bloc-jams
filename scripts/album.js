@@ -69,11 +69,23 @@ var findParentByClassName = function(element, targetClass) {
 
   //check if there is an element
   if(element) {
+
     //sets curent parent as the parent of the element passed
     var currentParent = element.parentElement;
+
+    //check to see if element has a parent
+    if (currentParent === null) {
+      console.log("No parent found.")
+    }
+
     //while the current parent does not = the target classs we are searching for (and is not null), then move up to the next parent element
-    while(currentParent.className !== targetClass && currentParent.className !== null) {
+    while (currentParent.className !== targetClass && currentParent.className !== null) {
     currentParent = currentParent.parentElement;
+
+    //if the loop has moved all the way up to the body node then the target class does not exist
+    if (currentParent === document.getElementsByTagName('body') ) {
+        return console.log("No parent with that class name found.")
+      }
     }
   }
   return currentParent;
