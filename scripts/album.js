@@ -3,7 +3,7 @@ var setSong = function(songNumber) {
     currentSoundFile.stop();
   }
 
-  currentPlayingSongNumber = songNumber;
+  currentPlayingSongNumber = parseInt(songNumber);
   currentSongFromAlbum = currentAlbum.songs[songNumber - 1];
   currentSoundFile = new buzz.sound(currentSongFromAlbum.audioUrl, {
     formats: ['mp3'],
@@ -55,12 +55,12 @@ var createSongRow = function(songNumber, songName, songLength) {
   // Switch Pause -> Play button when clicking on currently playing song.
 	else if (currentPlayingSongNumber === $songNumber) {
     if(currentSoundFile.isPaused()) {
-      $(this).html(playButtonTemplate);
-      $('.main-controls .play-pause').html(playerBarPlayButton);
-      currentSoundFile.play();
-    } else {
       $(this).html(pauseButtonTemplate);
       $('.main-controls .play-pause').html(playerBarPauseButton);
+      currentSoundFile.play();
+    } else {
+      $(this).html(playButtonTemplate);
+      $('.main-controls .play-pause').html(playerBarPlayButton);
       currentSoundFile.pause();
     }
 	}
